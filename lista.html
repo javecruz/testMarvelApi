@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>ejemplo handlebars</title>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.js"></script>
+	<script src="js/handlebars.runtime-v4.0.11.js"></script>
+	<script src="Templates/js/lista.js"></script>
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+	<script src="js/bootstrap.bundle.min.js"></script>
+	<link rel="stylesheet" href="css/bootstrap.css">
+	<link rel="stylesheet" href="css/index.css">
+
+</head>
+<body>
+	<div class="container">
+		
+		<div class="row">	
+			<nav class="nav">
+		 		<a class="nav-link active" href="index.html">Buscar heroe</a>
+		    	<a class="nav-link" href="#">Lista de todos los heroes</a>
+			</nav>
+		</div>
+
+	
+
+	<div class="row result">
+			
+	</div>
+
+		<img class="siguiente" src="next.jpg" alt="NEXT">
+	<div class="mt-5 loading" style="display:none">
+		<img class="rounded-circle" src="loading.gif" alt="LOAD">
+	</div>
+
+
+
+	<script>
+
+		$(document).ready(function(){
+
+			 var publicKEY = "a0a1d16d67684c11c1c15c9d9824e827";
+			 var privateKEY = "27c2de2595127abaab17e5957ac507715e5126fe";
+			 var ts = Date.now().toString();
+			 var hash = CryptoJS.MD5(ts+privateKEY+publicKEY);
+			// var url = "https://gateway.marvel.com/v1/public/characters="+$("#input").val()+"&ts="+ts+"&apikey="+publicKEY+"&hash="+hash;
+			var url = "https://gateway.marvel.com:443/v1/public/characters";
+			var offset = 0;
+			$.ajax({
+				url:url,
+				dataType:"json",
+				type:"GET",
+				data:{
+					ts:ts,
+					apikey:publicKEY,
+					hash:hash.toString(),
+					offset:offset
+				},
+				success:function(info){
+					var HTML = Handlebars.templates.lista(info);
+					$("div.result").html(HTML);
+				},
+				complete:function(){
+					offset += 20;
+				}
+			})
+
+			$("img.siguiente").on("click",function(){
+				window.scrollTo(0, 0);
+				
+				$.ajax({
+				url:url,
+				dataType:"json",
+				type:"GET",
+				data:{
+					ts:ts,
+					apikey:publicKEY,
+					hash:hash.toString(),
+					offset:offset
+				},
+				success:function(info){
+					var HTML = Handlebars.templates.lista(info);
+					$("div.result").html(HTML);
+				},
+				complete:function(){
+					offset += 20;
+
+				}
+			})
+			})
+
+
+		})
+
+	</script>
+
+</div>
+		
+	
+		
+</body>
+</html>

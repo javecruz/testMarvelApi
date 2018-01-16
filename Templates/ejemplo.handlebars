@@ -1,0 +1,24 @@
+<div class="row">
+	<h3 class="col-12 text-center">{{data.results.[0].name}}</h3>
+
+	<div class="col-12">
+		<img src="{{
+		data.results.[0].thumbnail.path}}.{{data.results.[0].thumbnail.extension}}" class="img-circle" alt="{{data.results.[0].name}}" width="304" height="236">
+	</div>
+
+	<div class="col-10 offset-1">
+		<blockquote class="blockquote">
+			<p class="text-center descripcion">{{data.results.[0].description}}</p>
+		</blockquote>
+		<br>
+		<img id="traducir" src="spanish.png" alt="Traducir" width="64" height="64">
+	</div>
+
+	<div class="col-10 offset-1 mt-5">
+		<blockquote class="blockquote">
+			<p class="text-center descripcion-es"></p>
+		</blockquote>
+	</div>
+	
+</div>
+

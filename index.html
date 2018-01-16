@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>ejemplo handlebars</title>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.js"></script>
+	<script src="js/handlebars.runtime-v4.0.11.js"></script>
+	<script src="Templates/js/ejemplo.js"></script>
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+	<script src="js/bootstrap.bundle.min.js"></script>
+	<link rel="stylesheet" href="css/bootstrap.css">
+	<link rel="stylesheet" href="css/index.css">
+
+</head>
+<body>
+	<div class="container">
+		
+		<div class="row">	
+			<nav class="nav">
+	 			<a class="nav-link active" href="#">Buscar heroe</a>
+	    		<a class="nav-link" href="lista.html">Lista de todos los heroes</a>
+			</nav>
+		</div>
+
+
+
+
+
+
+		<div class="input-group mt-5">
+		  <input type="text" class="form-control" id="input" placeholder="Type superhero's name you willing to search !!" aria-label="" aria-describedby="basic-addon1">
+		  <div class="input-group-append">
+		    <button class="btn btn-success llamar" type="button">Search</button>
+		  </div>
+		</div>
+	
+	
+	<div class="result">
+	</div>
+
+
+	<div class="mt-5 loading" style="display:none">
+		<img class="rounded-circle" src="loading.gif" alt="LOAD">
+	</div>
+
+</div>
+		<script type="text/javascript"> 
+
+			$(document).ready(function(){
+
+				var x = document.createElement("p")
+
+
+			$("button.llamar").click(function(){
+				
+				$(".loading").show();
+
+				var publicKEY = "a0a1d16d67684c11c1c15c9d9824e827";
+				var privateKEY = "27c2de2595127abaab17e5957ac507715e5126fe";
+				var ts = Date.now().toString();
+				var hash = CryptoJS.MD5(ts+privateKEY+publicKEY);
+				var url = "https://gateway.marvel.com/v1/public/characters?name="+$("#input").val()+"&ts="+ts+"&apikey="+publicKEY+"&hash="+hash;
+				// console.log(url);
+
+				$.ajax({
+					url:url,
+					type:"GET",
+					beforeSend: function(){
+						// console.log("Before Send")
+					},
+					complete: function(){
+				
+						// console.log("El complete es cuando ha llegado ya todos los datos")
+						$("img#traducir").click(function(){
+
+							var texto = $('.descripcion').html();
+
+
+							$.ajax({
+								url: "https://translate.yandex.net/api/v1.5/tr.json/translate",
+								type:"GET",
+								data:{
+									text:texto,
+									key:"trnsl.1.1.20180115T193428Z.df8c82b1b361d1c6.4274bf861fca2a012b334ecb093751c214362c4b",
+									lang:"en-es"
+								},
+
+								success:function(datos){
+									$(".descripcion-es").html(datos.text[0])
+								}
+							})
+							
+						})				
+					},
+					success: function(info){
+
+						$(".loading").hide();
+						var HTML = Handlebars.templates.ejemplo(info);
+						$("div.result").html(HTML);
+						console.log("SUCCESS !!");
+						
+					},
+					error: function(){
+						console.log("Hubo algun error")
+					}
+				})
+			})
+
+
+			})
+
+		
+
+				
+		</script>
+	
+		
+</body>
+</html>

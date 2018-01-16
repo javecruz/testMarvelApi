@@ -1,0 +1,18 @@
+img{
+	display:block;
+	margin: 0 auto;
+}
+
+#traducir:hover, .siguiente:hover{
+	cursor:pointer;
+}
+
+
+
+.caja{
+
+	width: 300px;
+	height: 300px;
+	background-color: red;
+}
+
